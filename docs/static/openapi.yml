@@ -12574,6 +12574,584 @@ paths:
                         }
       tags:
         - Query
+  '/zjing20/checkers/checkers/can_play_move/{idValue}/{player}/{fromX}/{fromY}/{toX}/{toY}':
+    get:
+      summary: Queries a list of CanPlayMove items.
+      operationId: Zjing20CheckersCheckersCanPlayMove
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              possible:
+                type: boolean
+              reason:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: idValue
+          in: path
+          required: true
+          type: string
+        - name: player
+          in: path
+          required: true
+          type: string
+        - name: fromX
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: fromY
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: toX
+          in: path
+          required: true
+          type: string
+          format: uint64
+        - name: toY
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /zjing20/checkers/checkers/leaderboard:
+    get:
+      summary: Queries a Leaderboard by index.
+      operationId: Zjing20CheckersCheckersLeaderboard
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Leaderboard:
+                type: object
+                properties:
+                  winners:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        playerAddress:
+                          type: string
+                        wonCount:
+                          type: string
+                          format: uint64
+                        dateAdded:
+                          type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /zjing20/checkers/checkers/next_game:
+    get:
+      summary: Queries a NextGame by index.
+      operationId: Zjing20CheckersCheckersNextGame
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              NextGame:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  idValue:
+                    type: string
+                    format: uint64
+                  fifoHead:
+                    type: string
+                  fifoTail:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /zjing20/checkers/checkers/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: Zjing20CheckersCheckersParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /zjing20/checkers/checkers/player_info:
+    get:
+      summary: Queries a list of PlayerInfo items.
+      operationId: Zjing20CheckersCheckersPlayerInfoAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              playerInfo:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    index:
+                      type: string
+                    wonCount:
+                      type: string
+                      format: uint64
+                    lostCount:
+                      type: string
+                      format: uint64
+                    forfeitedCount:
+                      type: string
+                      format: uint64
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/zjing20/checkers/checkers/player_info/{index}':
+    get:
+      summary: Queries a PlayerInfo by index.
+      operationId: Zjing20CheckersCheckersPlayerInfo
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              playerInfo:
+                type: object
+                properties:
+                  index:
+                    type: string
+                  wonCount:
+                    type: string
+                    format: uint64
+                  lostCount:
+                    type: string
+                    format: uint64
+                  forfeitedCount:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /zjing20/checkers/checkers/stored_game:
+    get:
+      summary: Queries a list of StoredGame items.
+      operationId: Zjing20CheckersCheckersStoredGameAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              storedGame:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    creator:
+                      type: string
+                    index:
+                      type: string
+                    game:
+                      type: string
+                    turn:
+                      type: string
+                    red:
+                      type: string
+                    black:
+                      type: string
+                    moveCount:
+                      type: string
+                      format: uint64
+                    beforeId:
+                      type: string
+                    afterId:
+                      type: string
+                    deadline:
+                      type: string
+                    winner:
+                      type: string
+                    wager:
+                      type: string
+                      format: uint64
+                    token:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/zjing20/checkers/checkers/stored_game/{index}':
+    get:
+      summary: Queries a StoredGame by index.
+      operationId: Zjing20CheckersCheckersStoredGame
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              storedGame:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  index:
+                    type: string
+                  game:
+                    type: string
+                  turn:
+                    type: string
+                  red:
+                    type: string
+                  black:
+                    type: string
+                  moveCount:
+                    type: string
+                    format: uint64
+                  beforeId:
+                    type: string
+                  afterId:
+                    type: string
+                  deadline:
+                    type: string
+                  winner:
+                    type: string
+                  wager:
+                    type: string
+                    format: uint64
+                  token:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
 definitions:
   cosmos.authz.v1beta1.Grant:
     type: object
@@ -19924,3 +20502,311 @@ definitions:
       and
 
       freezing clients
+  zjing20.checkers.checkers.Leaderboard:
+    type: object
+    properties:
+      winners:
+        type: array
+        items:
+          type: object
+          properties:
+            playerAddress:
+              type: string
+            wonCount:
+              type: string
+              format: uint64
+            dateAdded:
+              type: string
+  zjing20.checkers.checkers.MsgCreateGameResponse:
+    type: object
+    properties:
+      idValue:
+        type: string
+  zjing20.checkers.checkers.MsgPlayMoveResponse:
+    type: object
+    properties:
+      idValue:
+        type: string
+      capturedX:
+        type: string
+        format: int64
+      capturedY:
+        type: string
+        format: int64
+      winner:
+        type: string
+  zjing20.checkers.checkers.MsgRejectGameResponse:
+    type: object
+  zjing20.checkers.checkers.NextGame:
+    type: object
+    properties:
+      creator:
+        type: string
+      idValue:
+        type: string
+        format: uint64
+      fifoHead:
+        type: string
+      fifoTail:
+        type: string
+  zjing20.checkers.checkers.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  zjing20.checkers.checkers.PlayerInfo:
+    type: object
+    properties:
+      index:
+        type: string
+      wonCount:
+        type: string
+        format: uint64
+      lostCount:
+        type: string
+        format: uint64
+      forfeitedCount:
+        type: string
+        format: uint64
+  zjing20.checkers.checkers.QueryAllPlayerInfoResponse:
+    type: object
+    properties:
+      playerInfo:
+        type: array
+        items:
+          type: object
+          properties:
+            index:
+              type: string
+            wonCount:
+              type: string
+              format: uint64
+            lostCount:
+              type: string
+              format: uint64
+            forfeitedCount:
+              type: string
+              format: uint64
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  zjing20.checkers.checkers.QueryAllStoredGameResponse:
+    type: object
+    properties:
+      storedGame:
+        type: array
+        items:
+          type: object
+          properties:
+            creator:
+              type: string
+            index:
+              type: string
+            game:
+              type: string
+            turn:
+              type: string
+            red:
+              type: string
+            black:
+              type: string
+            moveCount:
+              type: string
+              format: uint64
+            beforeId:
+              type: string
+            afterId:
+              type: string
+            deadline:
+              type: string
+            winner:
+              type: string
+            wager:
+              type: string
+              format: uint64
+            token:
+              type: string
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  zjing20.checkers.checkers.QueryCanPlayMoveResponse:
+    type: object
+    properties:
+      possible:
+        type: boolean
+      reason:
+        type: string
+  zjing20.checkers.checkers.QueryGetLeaderboardResponse:
+    type: object
+    properties:
+      Leaderboard:
+        type: object
+        properties:
+          winners:
+            type: array
+            items:
+              type: object
+              properties:
+                playerAddress:
+                  type: string
+                wonCount:
+                  type: string
+                  format: uint64
+                dateAdded:
+                  type: string
+  zjing20.checkers.checkers.QueryGetNextGameResponse:
+    type: object
+    properties:
+      NextGame:
+        type: object
+        properties:
+          creator:
+            type: string
+          idValue:
+            type: string
+            format: uint64
+          fifoHead:
+            type: string
+          fifoTail:
+            type: string
+  zjing20.checkers.checkers.QueryGetPlayerInfoResponse:
+    type: object
+    properties:
+      playerInfo:
+        type: object
+        properties:
+          index:
+            type: string
+          wonCount:
+            type: string
+            format: uint64
+          lostCount:
+            type: string
+            format: uint64
+          forfeitedCount:
+            type: string
+            format: uint64
+  zjing20.checkers.checkers.QueryGetStoredGameResponse:
+    type: object
+    properties:
+      storedGame:
+        type: object
+        properties:
+          creator:
+            type: string
+          index:
+            type: string
+          game:
+            type: string
+          turn:
+            type: string
+          red:
+            type: string
+          black:
+            type: string
+          moveCount:
+            type: string
+            format: uint64
+          beforeId:
+            type: string
+          afterId:
+            type: string
+          deadline:
+            type: string
+          winner:
+            type: string
+          wager:
+            type: string
+            format: uint64
+          token:
+            type: string
+  zjing20.checkers.checkers.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  zjing20.checkers.checkers.StoredGame:
+    type: object
+    properties:
+      creator:
+        type: string
+      index:
+        type: string
+      game:
+        type: string
+      turn:
+        type: string
+      red:
+        type: string
+      black:
+        type: string
+      moveCount:
+        type: string
+        format: uint64
+      beforeId:
+        type: string
+      afterId:
+        type: string
+      deadline:
+        type: string
+      winner:
+        type: string
+      wager:
+        type: string
+        format: uint64
+      token:
+        type: string
+  zjing20.checkers.checkers.WinningPlayer:
+    type: object
+    properties:
+      playerAddress:
+        type: string
+      wonCount:
+        type: string
+        format: uint64
+      dateAdded:
+        type: string

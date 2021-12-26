@@ -5,6 +5,10 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "checkers/params.proto";
+import "checkers/next_game.proto";
+import "checkers/stored_game.proto";
+import "checkers/player_info.proto";
+import "checkers/leaderboard.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/zjing20/checkers/x/checkers/types";
@@ -15,7 +19,40 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/zjing20/checkers/checkers/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a NextGame by index.
+	rpc NextGame(QueryGetNextGameRequest) returns (QueryGetNextGameResponse) {
+		option (google.api.http).get = "/zjing20/checkers/checkers/next_game";
+	}
+// Queries a StoredGame by index.
+	rpc StoredGame(QueryGetStoredGameRequest) returns (QueryGetStoredGameResponse) {
+		option (google.api.http).get = "/zjing20/checkers/checkers/stored_game/{index}";
+	}
+
+	// Queries a list of StoredGame items.
+	rpc StoredGameAll(QueryAllStoredGameRequest) returns (QueryAllStoredGameResponse) {
+		option (google.api.http).get = "/zjing20/checkers/checkers/stored_game";
+	}
+
+// Queries a list of CanPlayMove items.
+	rpc CanPlayMove(QueryCanPlayMoveRequest) returns (QueryCanPlayMoveResponse) {
+		option (google.api.http).get = "/zjing20/checkers/checkers/can_play_move/{idValue}/{player}/{fromX}/{fromY}/{toX}/{toY}";
+	}
+
+// Queries a PlayerInfo by index.
+	rpc PlayerInfo(QueryGetPlayerInfoRequest) returns (QueryGetPlayerInfoResponse) {
+		option (google.api.http).get = "/zjing20/checkers/checkers/player_info/{index}";
+	}
+
+	// Queries a list of PlayerInfo items.
+	rpc PlayerInfoAll(QueryAllPlayerInfoRequest) returns (QueryAllPlayerInfoResponse) {
+		option (google.api.http).get = "/zjing20/checkers/checkers/player_info";
+	}
+
+// Queries a Leaderboard by index.
+	rpc Leaderboard(QueryGetLeaderboardRequest) returns (QueryGetLeaderboardResponse) {
+		option (google.api.http).get = "/zjing20/checkers/checkers/leaderboard";
+	}
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -27,4 +64,64 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
+message QueryGetNextGameRequest {}
+
+message QueryGetNextGameResponse {
+	NextGame NextGame = 1 [(gogoproto.nullable) = false];
+}
+message QueryGetStoredGameRequest {
+	  string index = 1;
+
+}
+
+message QueryGetStoredGameResponse {
+	StoredGame storedGame = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllStoredGameRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllStoredGameResponse {
+	repeated StoredGame storedGame = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryCanPlayMoveRequest {
+  string idValue = 1;
+  string player = 2;
+  uint64 fromX = 3;
+  uint64 fromY = 4;
+  uint64 toX = 5;
+  uint64 toY = 6;
+}
+
+message QueryCanPlayMoveResponse {
+  bool possible = 1;
+  string reason = 2;
+}
+
+message QueryGetPlayerInfoRequest {
+	  string index = 1;
+
+}
+
+message QueryGetPlayerInfoResponse {
+	PlayerInfo playerInfo = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPlayerInfoRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPlayerInfoResponse {
+	repeated PlayerInfo playerInfo = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetLeaderboardRequest {}
+
+message QueryGetLeaderboardResponse {
+	Leaderboard Leaderboard = 1 [(gogoproto.nullable) = false];
+}
 // this line is used by starport scaffolding # 3
