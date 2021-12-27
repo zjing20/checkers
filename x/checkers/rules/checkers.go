@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"github.com/tendermint/tendermint/libs/log"
 )
 
 const (
@@ -271,32 +272,42 @@ func (game *Game) playerHasJump(player Player) bool {
 	return false
 }
 
-func (game *Game) Move(src, dst Pos) (captured Pos, err error) {
+func (game *Game) Move(src, dst Pos, logger log.Logger) (captured Pos, err error) {
 	captured = NO_POS
 	err = nil
+	logger.Info("zjz:3.1")
 	if !game.PieceAt(src) {
 		return NO_POS, errors.New(fmt.Sprintf("No piece at source position: %v", src))
 	}
+	logger.Info("zjz:3.2")
 	if game.PieceAt(dst) {
 		return NO_POS, errors.New(fmt.Sprintf("Already piece at destination position: %v", dst))
 	}
+	logger.Info("zjz:3.3")
 	if !game.TurnIs(game.Pieces[src].Player) {
 		return NO_POS, errors.New(fmt.Sprintf("Not %v's turn", game.Pieces[src].Player))
 	}
+	logger.Info("zjz:3.4")
 	if !game.ValidMove(src, dst) {
 		return NO_POS, errors.New(fmt.Sprintf("Invalid move: %v to %v", src, dst))
 	}
+	logger.Info("zjz:3.5")
 	if game.ValidJump(src, dst) {
+		logger.Info("zjz:3.6")
 		game.Pieces[dst] = game.Pieces[src]
 		delete(game.Pieces, src)
 		captured = Capture(src, dst)
 		delete(game.Pieces, captured)
 	} else {
+		logger.Info("zjz:3.7")
 		game.Pieces[dst] = game.Pieces[src]
 		delete(game.Pieces, src)
 	}
+	logger.Info("zjz:3.8")
 	game.updateTurn(dst, captured != NO_POS)
+	logger.Info("zjz:3.9")
 	game.kingPiece(dst)
+	logger.Info("zjz:3.10")
 	return
 }
 
@@ -330,6 +341,7 @@ func ParsePiece(s string) (Piece, bool) {
 
 func Parse(s string) (*Game, error) {
 	if len(s) != BOARD_DIM*BOARD_DIM+(BOARD_DIM-1) {
+		panic("test_zj2")//err.Error()) // test_zj
 		return nil, errors.New(fmt.Sprintf("invalid board string: %v", s))
 	}
 	pieces := make(map[Pos]Piece)

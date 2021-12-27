@@ -26,6 +26,7 @@ func (storedGame *StoredGame) GetBlackAddress() (black sdk.AccAddress, err error
 func (storedGame *StoredGame) ParseGame() (game *rules.Game, err error) {
 	game, errGame := rules.Parse(storedGame.Game)
 	if err != nil {
+		panic("test_zj1")//err.Error()) // test_zj
 		return game, sdkerrors.Wrapf(errGame, ErrGameNotParseable.Error())
 	}
 	game.Turn = rules.Player{

@@ -72,6 +72,7 @@ func (k Keeper) CanPlayMove(goCtx context.Context, req *types.QueryCanPlayMoveRe
 			X: int(req.ToX),
 			Y: int(req.ToY),
 		},
+		ctx.Logger(),
 	)
 	if moveErr != nil {
 		return &types.QueryCanPlayMoveResponse{
