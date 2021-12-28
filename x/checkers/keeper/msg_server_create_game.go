@@ -17,7 +17,7 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 	if !found {
 		panic("NextGame not found")
 	}
-
+	
 	newIndex := strconv.FormatUint(nextGame.IdValue, 10)
 
 	storedGame := types.StoredGame{
@@ -38,8 +38,7 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 	if err != nil {
 		return nil, err
 	}
-
-	k.Keeper.SendToFifoTail(ctx, &storedGame, &nextGame)
+	k.Keeper.AddToFifoTail(ctx, &storedGame, &nextGame)
 	k.Keeper.SetStoredGame(ctx, storedGame)
 
 	nextGame.IdValue++

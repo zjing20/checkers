@@ -9,12 +9,10 @@ const TypeMsgPlayMove = "play_move"
 
 var _ sdk.Msg = &MsgPlayMove{}
 
-func NewMsgPlayMove(creator string, idValue string, fromX uint64, fromY uint64, toX uint64, toY uint64) *MsgPlayMove {
+func NewMsgPlayMove(creator string, idValue string, toX uint64, toY uint64) *MsgPlayMove {
 	return &MsgPlayMove{
 		Creator: creator,
 		IdValue: idValue,
-		FromX:   fromX,
-		FromY:   fromY,
 		ToX:     toX,
 		ToY:     toY,
 	}

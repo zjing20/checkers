@@ -50,16 +50,14 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 		return nil, err
 	}
 	ctx.Logger().Info("zjz:3")
-	ctx.Logger().Info(fmt.Sprintf("zjz:move from :%d,%d to %d,%d ",msg.FromX,msg.FromY,msg.ToX,msg.ToY))
+	ctx.Logger().Info(fmt.Sprintf("zjz:move  to %d,%d ",msg.ToX,msg.ToY))
 	captured, moveErr := game.Move(
-		rules.Pos{
-			X: int(msg.FromX),
-			Y: int(msg.FromY),
-		},
+		player,
 		rules.Pos{
 			X: int(msg.ToX),
 			Y: int(msg.ToY),
 		},
+		false,
 		ctx.Logger(),
 	)
 	if moveErr != nil {

@@ -1,6 +1,6 @@
 package keeper
 
-import (
+import (	
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/zjing20/checkers/x/checkers/types"
 )
@@ -31,6 +31,12 @@ func (k Keeper) RemoveFromFifo(ctx sdk.Context, game *types.StoredGame, info *ty
 			info.FifoHead = afterElement.Index
 		}
 	}
+	// If removing the only stored game
+	if game.BeforeId == types.NoFifoIdKey && game.AfterId == types.NoFifoIdKey {
+		info.FifoHead = types.NoFifoIdKey
+		info.FifoTail = types.NoFifoIdKey
+	}
+
 	game.BeforeId = types.NoFifoIdKey
 	game.AfterId = types.NoFifoIdKey
 }
@@ -49,15 +55,39 @@ func (k Keeper) SendToFifoTail(ctx sdk.Context, game *types.StoredGame, info *ty
 	} else {
 		// Snip game out
 		k.RemoveFromFifo(ctx, game, info)
-
 		// Now add to tail
 		currentTail, found := k.GetStoredGame(ctx, info.FifoTail)
 		if !found {
 			panic("Current Fifo tail was not found")
 		}
 		currentTail.AfterId = game.Index
+		k.SetStoredGame(ctx, currentTail)
 		game.BeforeId = currentTail.Index
+		game.AfterId = types.NoFifoIdKey
+		info.FifoTail = game.Index
+	}
+}
 
+func (k Keeper) AddToFifoTail(ctx sdk.Context, game *types.StoredGame, info *types.NextGame) {
+	if info.FifoHead == types.NoFifoIdKey && info.FifoTail == types.NoFifoIdKey {
+		game.BeforeId = types.NoFifoIdKey
+		game.AfterId = types.NoFifoIdKey
+		info.FifoHead = game.Index
+		info.FifoTail = game.Index
+	} else if info.FifoHead == types.NoFifoIdKey || info.FifoTail == types.NoFifoIdKey {
+		panic("Fifo should have both head and tail or none")
+	} else if info.FifoTail == game.Index {
+		// Nothing to do, already at tail
+	} else {
+		// Now add to tail
+		currentTail, found := k.GetStoredGame(ctx, info.FifoTail)
+		if !found {
+			panic("Current Fifo tail was not found")
+		}
+		currentTail.AfterId = game.Index
+		k.SetStoredGame(ctx, currentTail)
+		game.BeforeId = currentTail.Index
+		game.AfterId = types.NoFifoIdKey
 		info.FifoTail = game.Index
 	}
 }

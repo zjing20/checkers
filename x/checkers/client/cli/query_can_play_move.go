@@ -14,25 +14,17 @@ var _ = strconv.Itoa(0)
 
 func CmdCanPlayMove() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "can-play-move [id-value] [player] [from-x] [from-y] [to-x] [to-y]",
+		Use:   "can-play-move [id-value] [player] [to-x] [to-y]",
 		Short: "Query canPlayMove",
-		Args:  cobra.ExactArgs(6),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			reqIdValue := args[0]
 			reqPlayer := args[1]
-			reqFromX, err := cast.ToUint64E(args[2])
+			reqToX, err := cast.ToUint64E(args[2])
 			if err != nil {
 				return err
 			}
-			reqFromY, err := cast.ToUint64E(args[3])
-			if err != nil {
-				return err
-			}
-			reqToX, err := cast.ToUint64E(args[4])
-			if err != nil {
-				return err
-			}
-			reqToY, err := cast.ToUint64E(args[5])
+			reqToY, err := cast.ToUint64E(args[3])
 			if err != nil {
 				return err
 			}
@@ -48,8 +40,6 @@ func CmdCanPlayMove() *cobra.Command {
 
 				IdValue: reqIdValue,
 				Player:  reqPlayer,
-				FromX:   reqFromX,
-				FromY:   reqFromY,
 				ToX:     reqToX,
 				ToY:     reqToY,
 			}
