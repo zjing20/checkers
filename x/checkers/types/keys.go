@@ -43,6 +43,7 @@ const (
 	StoredGameEventBlack   = "Black"
 	StoredGameEventWager   = "Wager"
 	StoredGameEventToken   = "Token"
+	StoredGameEventTurn    = "Turn" // test_zj
 )
 
 const (

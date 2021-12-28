@@ -24,6 +24,7 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 		Creator:   msg.Creator,
 		Index:     newIndex,
 		Game:      rules.New().String(),
+		Turn:	   rules.BLACK_PLAYER.Color, // test_zj
 		Red:       msg.Red,
 		Black:     msg.Black,
 		MoveCount: 0,
@@ -55,6 +56,7 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 			sdk.NewAttribute(types.StoredGameEventIndex, newIndex),
 			sdk.NewAttribute(types.StoredGameEventRed, msg.Red),
 			sdk.NewAttribute(types.StoredGameEventBlack, msg.Black),
+			sdk.NewAttribute(types.StoredGameEventTurn, rules.BLACK_PLAYER.Color), // test_zj
 			sdk.NewAttribute(types.StoredGameEventWager, strconv.FormatUint(msg.Wager, 10)),
 			sdk.NewAttribute(types.StoredGameEventToken, msg.Token),
 		),

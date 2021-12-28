@@ -13,11 +13,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) CanPlayMove(goCtx context.Context, req *types.QueryCanPlayMoveRequest) (*types.QueryCanPlayMoveResponse, error) {
-	return &types.QueryCanPlayMoveResponse{
-		Possible: true,
-		Reason:   "ok",
-	}, nil
+func (k Keeper) CanPlayMove(goCtx context.Context, req *types.QueryCanPlayMoveRequest) (*types.QueryCanPlayMoveResponse, error) {	
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
