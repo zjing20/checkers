@@ -14,10 +14,7 @@ import (
 )
 
 func (k Keeper) CanPlayMove(goCtx context.Context, req *types.QueryCanPlayMoveRequest) (*types.QueryCanPlayMoveResponse, error) {
-	return &types.QueryCanPlayMoveResponse{
-		Possible: true,
-		Reason:   "ok",
-	}, nil
+
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -64,14 +61,13 @@ func (k Keeper) CanPlayMove(goCtx context.Context, req *types.QueryCanPlayMoveRe
 
 	// Attempt a move in memory
 	_, moveErr := game.Move(
-		rules.Pos{
-			X: int(req.FromX),
-			Y: int(req.FromY),
-		},
+		player,
 		rules.Pos{
 			X: int(req.ToX),
 			Y: int(req.ToY),
 		},
+		true,
+		ctx.Logger(),
 	)
 	if moveErr != nil {
 		return &types.QueryCanPlayMoveResponse{

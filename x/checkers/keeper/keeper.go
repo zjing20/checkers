@@ -14,6 +14,7 @@ import (
 type (
 	Keeper struct {
 		bank       types.BankKeeper
+		account    types.AccountKeeper  // zj_test
 		cdc        codec.BinaryCodec
 		storeKey   sdk.StoreKey
 		memKey     sdk.StoreKey
@@ -23,6 +24,7 @@ type (
 
 func NewKeeper(
 	bank types.BankKeeper,
+	account    types.AccountKeeper,
 	cdc codec.BinaryCodec,
 	storeKey,
 	memKey sdk.StoreKey,
@@ -36,6 +38,7 @@ func NewKeeper(
 
 	return &Keeper{
 		bank:       bank,
+		account:     account,
 		cdc:        cdc,
 		storeKey:   storeKey,
 		memKey:     memKey,

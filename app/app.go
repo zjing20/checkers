@@ -156,6 +156,7 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		checkersmoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking}, // zj_test
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -351,6 +352,7 @@ func New(
 
 	app.CheckersKeeper = *checkersmodulekeeper.NewKeeper(
 		app.BankKeeper,
+		app.AccountKeeper,
 		appCodec,
 		keys[checkersmoduletypes.StoreKey],
 		keys[checkersmoduletypes.MemStoreKey],

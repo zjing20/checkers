@@ -2,11 +2,11 @@ package keeper
 
 import (
 	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	rules "github.com/zjing20/checkers/x/checkers/rules"
 	"github.com/zjing20/checkers/x/checkers/types"
+//	accountTypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 // Returns an error if the player has not enough funds.
@@ -14,17 +14,46 @@ func (k *Keeper) CollectWager(ctx sdk.Context, storedGame *types.StoredGame) err
 	// Make the player pay the wager at the beginning
 	if storedGame.MoveCount == 0 {
 		// Black plays first
+		ctx.Logger().Info("zjz:2.0")
 		black, err := storedGame.GetBlackAddress()
+		ctx.Logger().Info(black.String())
+		ctx.Logger().Info("zjz:2.1")
 		if err != nil {
 			panic(err.Error())
 		}
-		err = k.bank.SendCoinsFromAccountToModule(ctx, black, types.ModuleName, sdk.NewCoins(storedGame.GetWagerCoin()))
+		ctx.Logger().Info("zjz:2.2")
+		// recipientAcc := k.account.GetModuleAccount(ctx, types.ModuleName) // zj_test
+		// addr, perms := k.account.GetModuleAddressAndPermissions(types.ModuleName)
+		// ctx.Logger().Info(fmt.Sprintf("zjz: perm len %d",len(perms)))
+		// if addr == nil || strings.TrimSpace(addr.String()) == "" {
+		// 	ctx.Logger().Info("zjz: address empty")
+		// }
+		// ctx.Logger().Info(fmt.Sprintf("zjz: address not empty %s", addr.String()))
+		// acc := k.account.GetAccount(ctx, addr)
+		// if acc != nil {
+		// 	macc, ok := acc.(accountTypes.ModuleAccountI)
+		// 	if !ok {
+		// 		ctx.Logger().Info("zjz: no module account")
+		// 	}
+		// 	ctx.Logger().Info("zjz: if ",macc)
+		// } else {
+		// 	macc := accountTypes.NewEmptyModuleAccount(types.ModuleName, perms...)
+		// 	ctx.Logger().Info(fmt.Sprintf("zjz: else %s",macc.String()))
+		// }
+		// ctx.Logger().Info("zjz:2.2.5")
+		// ctx.Logger().Info(recipientAcc.GetAddress().String()) //zj_test
+		// ctx.Logger().Info(black.String()) //zj_test
+		// red, err := storedGame.GetRedAddress() //zj_test
+		// k.bank.SendCoins(ctx, black, red, sdk.NewCoins(storedGame.GetWagerCoin()))  //zj_test
+		err = k.bank.SendCoinsFromAccountToModule(ctx, black, types.ModuleName, sdk.NewCoins(storedGame.GetWagerCoin())) 
+		ctx.Logger().Info("zjz:2.3")
 		if err != nil {
 			return sdkerrors.Wrapf(err, types.ErrBlackCannotPay.Error())
 		}
 	} else if storedGame.MoveCount == 1 {
 		// Red plays second
-		red, err := storedGame.GetBlackAddress()
+		// red, err := storedGame.GetBlackAddress() // zj_test
+		red, err := storedGame.GetRedAddress()
 		if err != nil {
 			panic(err.Error())
 		}

@@ -11,19 +11,20 @@ import (
 
 func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (*types.MsgCreateGameResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
+	ctx.Logger().Info("zjz: -2")
 	// TODO: Handling the message
 	nextGame, found := k.Keeper.GetNextGame(ctx)
 	if !found {
 		panic("NextGame not found")
 	}
-
+	
 	newIndex := strconv.FormatUint(nextGame.IdValue, 10)
 
 	storedGame := types.StoredGame{
 		Creator:   msg.Creator,
 		Index:     newIndex,
 		Game:      rules.New().String(),
+		Turn:      rules.BLACK_PLAYER.Color, // test_zj
 		Red:       msg.Red,
 		Black:     msg.Black,
 		MoveCount: 0,
@@ -37,8 +38,7 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 	if err != nil {
 		return nil, err
 	}
-
-	k.Keeper.SendToFifoTail(ctx, &storedGame, &nextGame)
+	k.Keeper.AddToFifoTail(ctx, &storedGame, &nextGame)
 	k.Keeper.SetStoredGame(ctx, storedGame)
 
 	nextGame.IdValue++
@@ -55,6 +55,7 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 			sdk.NewAttribute(types.StoredGameEventIndex, newIndex),
 			sdk.NewAttribute(types.StoredGameEventRed, msg.Red),
 			sdk.NewAttribute(types.StoredGameEventBlack, msg.Black),
+			sdk.NewAttribute(types.StoredGameEventTurn, rules.BLACK_PLAYER.Color), // test_zj
 			sdk.NewAttribute(types.StoredGameEventWager, strconv.FormatUint(msg.Wager, 10)),
 			sdk.NewAttribute(types.StoredGameEventToken, msg.Token),
 		),
